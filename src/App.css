@@ -1,12 +1,16 @@
 .Menu-Item {
-  @apply w-full inset-0 items-center justify-center h-10 w-10;
+  @apply w-full inset-0 items-center justify-center h-6;
 }
 nav [data-active="true"] {
-  @apply bg-white text-green-500 rounded-l-md;
+  @apply relative bg-white text-green-900 rounded-l-full;
 }
 nav [data-active="true"]:before {
-  @apply w-2 h-14 fixed -mt-2 ml-7;
+  @apply w-6 h-6 absolute -top-6 right-0;
   content: "";
-  background: radial-gradient(circle at top left, black .5rem, transparent .5rem),
-  radial-gradient(circle at bottom left, black .5rem, white .5rem);
+  background: radial-gradient(circle at top left, transparent 1.5rem, white 1.5rem);
+}
+nav [data-active="true"]:after {
+  @apply w-6 h-6 absolute -bottom-6 right-0;
+  content: "";
+  background: radial-gradient(circle at bottom left, transparent 1.5rem, white 1.5rem);
 }
