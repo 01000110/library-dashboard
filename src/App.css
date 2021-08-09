@@ -1,15 +1,15 @@
 .Menu-Item {
   @apply w-full inset-0 items-center justify-center h-6;
 }
-nav [data-active="true"] {
-  @apply relative bg-white text-green-900 rounded-l-full;
+nav .active {
+  @apply relative block bg-white text-green-900 rounded-l-full py-4;
 }
-nav [data-active="true"]:before {
+nav .active:before {
   @apply w-6 h-6 absolute -top-6 right-0;
   content: "";
   background: radial-gradient(circle at top left, transparent 1.5rem, white 1.5rem);
 }
-nav [data-active="true"]:after {
+nav .active:after {
   @apply w-6 h-6 absolute -bottom-6 right-0;
   content: "";
   background: radial-gradient(circle at bottom left, transparent 1.5rem, white 1.5rem);
