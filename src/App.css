@@ -1,16 +1,29 @@
+#root {
+  @apply bg-gray-50 min-h-screen;
+}
 .Menu-Item {
   @apply w-full inset-0 items-center justify-center h-6;
 }
 nav .active {
-  @apply relative block bg-white text-green-900 rounded-l-full py-4;
+  @apply relative block bg-gray-50 text-green-900 rounded-l-full py-4;
 }
 nav .active:before {
   @apply w-6 h-6 absolute -top-6 right-0;
   content: "";
-  background: radial-gradient(circle at top left, transparent 1.5rem, white 1.5rem);
+  background: radial-gradient(circle at top left, transparent 1.5rem, rgba(249, 250, 251, 1) 1.5rem);
 }
 nav .active:after {
   @apply w-6 h-6 absolute -bottom-6 right-0;
   content: "";
-  background: radial-gradient(circle at bottom left, transparent 1.5rem, white 1.5rem);
+  background: radial-gradient(circle at bottom left, transparent 1.5rem, rgba(249, 250, 251, 1) 1.5rem);
+}
+
+.TopBar {
+  @apply w-full pl-20 pt-5;
+}
+.Content {
+  @apply ml-20 p-6;
+}
+.Content header {
+  @apply font-semibold text-lg;
 }
