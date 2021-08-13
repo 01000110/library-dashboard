@@ -55,8 +55,9 @@ export function BookDisplay(props) {
                              alt={data.volumeInfo.title+`'s cover`}/>
                     </div>
                     <div className="flex flex-col md:w-3/4 sm:w-2/3 w-full sm:space-y-4 place-content-between">
-                        <div className="flex justify-between items-start">
+                        <div className="justify-between items-start">
                             <h2 className="text-3xl font-bold">{data.volumeInfo.title}</h2>
+                            <p className="text-md text-gray-700">{data.volumeInfo.subtitle}</p>
                         </div>
                         <div>
                             <div className="text-sm text-gray-400">{data.volumeInfo.printType}</div>
@@ -65,18 +66,22 @@ export function BookDisplay(props) {
                         {
                             data.volumeInfo.title === 'Do Dice Play God?' | data.volumeInfo.title === 'Compilers'
                                 ?   <>
-                                    <button className="mb-2 md:mb-0 bg-green-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full hover:bg-gray-800"
-                                            type="button">Request this {data.volumeInfo.printType}</button>
+                                    <button className="mb-2 md:mb-0 bg-green-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full hover:bg-gray-800 "
+                                            type="button">Request this <span className="lowercase">{data.volumeInfo.printType}</span></button>
                                 </>
                                 :   <button className="mb-2 md:mb-0 bg-gray-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full cursor-not-allowed"
                                             type="button" disabled={true}>You already have this one</button>
                         }
-                        <div className="text-md text-gray-700 whitespace-pre-wrap">{data.volumeInfo.categories.join(`\n`)}</div>
+                        <div className="text-sm text-gray-700 whitespace-pre-wrap">{data.volumeInfo.categories.join(`\n`)}</div>
                     </div>
                 </div>
                 <div className="bg-white shadow-lg border-gray-100 border sm:rounded-3xl p-8 w-full">
                     <p className="text-green-700">Description:</p>
                     <div dangerouslySetInnerHTML={{__html: data.volumeInfo.description}}></div>
+                    <hr className="my-5"/>
+                    <p className="text-green-700">Publisher: <span className="text-black">{data.volumeInfo.publisher}</span></p>
+                    <p className="text-green-700">Publication date: <span className="text-black">{data.volumeInfo.publishedDate}</span></p>
+                    <p className="text-green-700"># of pages: <span className="text-black">{data.volumeInfo.printedPageCount}</span></p>
                 </div>
             </>
         )
