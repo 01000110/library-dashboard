@@ -2,7 +2,7 @@ import './App.css';
 import {BookOpenIcon, ClipboardListIcon, HomeIcon, LinkIcon, SearchIcon,} from '@heroicons/react/outline'
 import React from "react";
 import {NavLink, Routes, Route} from "react-router-dom";
-import {LoansPage, HomePage, ListsPage, DigitalPage} from './page.js'
+import {LoansPage, HomePage, ListsPage, DigitalPage, BookDisplay} from './page.js'
 
 const menuItems = [
     {
@@ -91,6 +91,9 @@ function App() {
                   </Route>
                   <Route path="/digital" >
                       <DigitalPage/>
+                  </Route>
+                  <Route path="/book/:id">
+                      <BookDisplay/>
                   </Route>
               </Routes>
           </section>
