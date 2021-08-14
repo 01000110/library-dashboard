@@ -38,6 +38,24 @@ function BookItem(props) {
 }
 
 export function BookDisplay(props) {
+    const [list, setList] = useState(
+        localStorage.getItem('list')? localStorage.getItem('list')?.split(',') : []
+    )
+    useEffect(() => {
+        localStorage.setItem('list', list.join(','));
+    },[list])
+    function updateList(props) {
+        if (list.includes(props.id)) {
+            const newList = list.filter((item) => item !== props.id);
+            setList(newList);
+        }
+        else {
+            const newList = list.concat(props.id);
+            setList(newList);
+        }
+        console.log(list)
+    }
+
     const { id } = useParams();
     const [data, setData] = useState(null);
     useEffect(() => {
@@ -66,9 +84,10 @@ export function BookDisplay(props) {
                             <div className="text-lg text-gray-800">{data.volumeInfo.authors.join(', ')}</div>
                         </div>
                         <div className="flex items-center">
-                            <button className="flex-shrink-0 text-green-800 w-12 h-12  hover:text-gray-800" type="button"><HeartIcon className="h-12"/></button>
+                            <button className="flex-shrink-0 text-green-800 w-12 h-12  hover:text-gray-800" type="button"
+                            onClick={() => updateList({id: data.id})}><HeartIcon className="h-12"/></button>
                             {
-                            data.volumeInfo.title === 'Do Dice Play God?' | data.volumeInfo.title === 'Compilers'
+                            data.volumeInfo.title !== 'Do Dice Play God?' && data.volumeInfo.title !== 'Compilers'
                                 ?   <button className="flex-1 ml-2 mb-2 md:mb-0 bg-green-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full hover:bg-gray-800"
                                                 type="button">Request this <span className="lowercase">{data.volumeInfo.printType}</span></button>
                                 :   <button className="flex-1 mb-2 md:mb-0 bg-gray-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full cursor-not-allowed"
@@ -106,7 +125,6 @@ function BookRow(props) {
     },[ApiUrl])
 
     function BookRowItem(props) {
-        console.log(props.book)
         return (
             <Link to={'/book/'+props.id} className="group p-3 hover:bg-gray-50">
                 <img className="hidden md:block md:visible max-h-48 object-contain mx-auto"
@@ -196,8 +214,25 @@ export function DigitalPage() {
 }
 
 export function ListsPage() {
+    const [list, setList] = useState(
+        [localStorage.getItem('list')? localStorage.getItem('list')?.split(',') : null]
+    )
+    useEffect(() => {
+        localStorage.setItem('list', list.join(','));
+        console.log(list);
+    },[list])
+    function updateList(props) {
+        if (list.includes(props.id)) {
+            const newList = list.filter((item) => item !== props.id);
+            setList(newList);
+        }
+        else {
+            const newList = [...list, props.id,];
+            setList(newList);
+        }
+    }
     return (
-        <p>Lists</p>
+        <button onClick={() => updateList({id: 'xcL3DwAAQBAJ'})}>add</button>
     )
 }
 
