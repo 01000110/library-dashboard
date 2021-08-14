@@ -1,5 +1,5 @@
 import './App.css';
-import {BookOpenIcon, ClipboardListIcon, HomeIcon, LinkIcon, SearchIcon,} from '@heroicons/react/outline'
+import {BookOpenIcon, HeartIcon, HomeIcon, LinkIcon, SearchIcon,} from '@heroicons/react/outline'
 import React from "react";
 import {NavLink, Routes, Route} from "react-router-dom";
 import {LoansPage, HomePage, ListsPage, DigitalPage, BookDisplay} from './page.js'
@@ -17,7 +17,7 @@ const menuItems = [
     },
     {
         name: "lists",
-        icon: React.createElement(ClipboardListIcon, {className: 'Menu-Item'}),
+        icon: React.createElement(HeartIcon, {className: 'Menu-Item'}),
         link: "/lists"
     },
     {

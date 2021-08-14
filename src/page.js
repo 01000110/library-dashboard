@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
+import {ChevronDoubleRightIcon, HeartIcon} from "@heroicons/react/outline";
 
 function BookItem(props) {
     return (
@@ -45,7 +46,6 @@ export function BookDisplay(props) {
             .then(setData)
     }, [id]);
     if (data) {
-        console.log(data)
         return (
             <>
                 <div className="bg-white shadow-lg border-gray-100 border sm:rounded-3xl p-8 non-flex sm:flex sm:space-x-8 w-full">
@@ -55,34 +55,88 @@ export function BookDisplay(props) {
                              alt={data.volumeInfo.title+`'s cover`}/>
                     </div>
                     <div className="flex flex-col md:w-3/4 sm:w-2/3 w-full sm:space-y-4 place-content-between">
-                        <div className="flex justify-between items-start">
+                        <div className="justify-between items-start">
                             <h2 className="text-3xl font-bold">{data.volumeInfo.title}</h2>
+                            <h2 className="text-xl text-gray-700 font-semibold">{data.volumeInfo.subtitle}</h2>
                         </div>
                         <div>
-                            <div className="text-sm text-gray-400">{data.volumeInfo.printType}</div>
+                            <div className="text-sm text-gray-400">
+                                {data.volumeInfo.printType + ' | ' + data.volumeInfo.printedPageCount} pages
+                            </div>
                             <div className="text-lg text-gray-800">{data.volumeInfo.authors.join(', ')}</div>
                         </div>
-                        {
+                        <div className="flex items-center">
+                            <button className="flex-shrink-0 text-green-800 w-12 h-12  hover:text-gray-800" type="button"><HeartIcon className="h-12"/></button>
+                            {
                             data.volumeInfo.title === 'Do Dice Play God?' | data.volumeInfo.title === 'Compilers'
-                                ?   <>
-                                    <button className="mb-2 md:mb-0 bg-green-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full hover:bg-gray-800"
-                                            type="button">Request this {data.volumeInfo.printType}</button>
-                                </>
-                                :   <button className="mb-2 md:mb-0 bg-gray-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full cursor-not-allowed"
+                                ?   <button className="flex-1 ml-2 mb-2 md:mb-0 bg-green-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full hover:bg-gray-800"
+                                                type="button">Request this <span className="lowercase">{data.volumeInfo.printType}</span></button>
+                                :   <button className="flex-1 mb-2 md:mb-0 bg-gray-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full cursor-not-allowed"
                                             type="button" disabled={true}>You already have this one</button>
+                            }
+                        </div>
+                        {
+                            data.volumeInfo.categories ? <div className="text-md text-gray-700 whitespace-pre-wrap">{data.volumeInfo.categories.join(`\n`)}</div> : null
                         }
-                        <div className="text-md text-gray-700 whitespace-pre-wrap">{data.volumeInfo.categories.join(`\n`)}</div>
+
                     </div>
                 </div>
                 <div className="bg-white shadow-lg border-gray-100 border sm:rounded-3xl p-8 w-full">
                     <p className="text-green-700">Description:</p>
-                    <div dangerouslySetInnerHTML={{__html: data.volumeInfo.description}}></div>
+                    <div dangerouslySetInnerHTML={{__html: data.volumeInfo.description}} />
+                    <hr className="my-5" />
+                    <p><span className="text-green-700">Publisher:</span> {data.volumeInfo.publisher}</p>
+                    <p><span className="text-green-700">Publication date:</span> {data.volumeInfo.publishedDate}</p>
                 </div>
             </>
         )
     }
     else {
         return (<p>loading...</p>)
+    }
+}
+
+function BookRow(props) {
+    const ApiUrl =`https://www.googleapis.com/books/v1/users/105889888655647378716/bookshelves/${props.shelfId}/volumes`;
+    const [data, setData] = useState(null);
+    useEffect(() => {
+        fetch(ApiUrl)
+            .then(response => response.json())
+            .then(setData)
+    },[ApiUrl])
+
+    function BookRowItem(props) {
+        console.log(props.book)
+        return (
+            <Link to={'/book/'+props.id} className="group p-3 hover:bg-gray-50">
+                <img className="hidden md:block md:visible max-h-48 object-contain mx-auto"
+                     src={props.book.imageLinks.smallThumbnail} alt={`cover of ` + props.book.title + ` by ` + props.book.authors[0]}/>
+                <p className="font-black pt-2 group-hover:text-green-700">
+                    <span className="md:hidden"><ChevronDoubleRightIcon className="h-5 inline-block justify-self-center text-green-700"/></span>
+                    {props.book.title}</p>
+                <p className="font-normal group-hover:text-gray-700">{props.book.authors.join(', ')}</p>
+            </Link>
+        )
+    }
+
+    if (data) {
+        return (
+            <>
+                <h1 className="text-green-900 font-black mt-5">{props.shelfName}</h1>
+                <div className="bg-white shadow-lg border-gray-100 border rounded-xl w-full px-3 py-5 grid grid-cols-1 md:grid-cols-5 place-content-stretch md:divide-x divide-gray-100">
+                    {
+                        data.items.map(item => {
+                            return (<BookRowItem key={item.id} book={item.volumeInfo} id={item.id}/>)
+                        })
+                    }
+                </div>
+            </>
+        )
+    }
+    else {
+        return (
+            <p>Loading...</p>
+        )
     }
 }
 
@@ -126,7 +180,12 @@ export function LoansPage() {
 
 export function HomePage() {
     return (
-        <p>Home</p>
+       <>
+           <header>Home</header>
+           <BookRow shelfId="1002" shelfName="Popular Fiction"/>
+           <BookRow shelfId="1003" shelfName="Popular Non-Fiction"/>
+           <BookRow shelfId="1004" shelfName="Popular Children's"/>
+       </>
     )
 }
 
