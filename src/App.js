@@ -68,7 +68,7 @@ class Search extends React.Component {
     render() {
         return (
             <form>
-                <div className="flex items-center w-auto lg:w-5/12 mx-6 px-3 py-2 border rounded hover:bg-white focus-within:bg-white">
+                <div className="flex items-center w-auto md:w-5/12 mx-6 px-3 py-2 border rounded hover:bg-white focus-within:bg-white">
                     <label htmlFor="search" className="sr-only">Search</label>
                     <input id="search" placeholder="Search library..."
                            type="text" className="bg-transparent w-11/12 ring-0" onChange={this.myChangeHandler}/>

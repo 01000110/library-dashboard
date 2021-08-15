@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
-import {ChevronDoubleRightIcon, HeartIcon} from "@heroicons/react/outline";
+import {ChevronDoubleRightIcon, ExternalLinkIcon, HeartIcon} from "@heroicons/react/outline";
 import {HeartIcon as FullHeartIcon} from "@heroicons/react/solid";
 
 function BookItem(props) {
@@ -227,38 +227,45 @@ export function DigitalPage() {
         <>
             <header>Digital Resources</header>
             <ul>
-                <li><a href="https://www.pressreader.com/catalog/">PressReader</a></li>
-                <li><a href="http://bergen.naxosmusiclibrary.com/">Naxos Music Library</a></li>
-                <li><a href="https://www.nb.no/search">NB.no: Nettbiblioteket</a></li>
-                <li><a href="https://www.bibsent.no/bibliotekprodukter/bookbites">Bookbites (e-book reader)</a></li>
-                <li><a href="https://filmbib.dspree.com/">Filmbib</a></li>
-                <li><a href="https://filmoteket.no/">filmoteket.no</a></li>
+                <li className="hover:text-green-800 py-3"><ExternalLinkIcon className="h-5 mr-3 inline-block justify-self-center text-green-700"/><a href="https://www.pressreader.com/catalog/">PressReader</a></li>
+                <li className="hover:text-green-800 py-3"><ExternalLinkIcon className="h-5 mr-3 inline-block justify-self-center text-green-700"/><a href="http://bergen.naxosmusiclibrary.com/">Naxos Music Library</a></li>
+                <li className="hover:text-green-800 py-3"><ExternalLinkIcon className="h-5 mr-3 inline-block justify-self-center text-green-700"/><a href="https://www.nb.no/search">NB.no: Nettbiblioteket</a></li>
+                <li className="hover:text-green-800 py-3"><ExternalLinkIcon className="h-5 mr-3 inline-block justify-self-center text-green-700"/><a href="https://www.bibsent.no/bibliotekprodukter/bookbites">Bookbites (e-book reader)</a></li>
+                <li className="hover:text-green-800 py-3"><ExternalLinkIcon className="h-5 mr-3 inline-block justify-self-center text-green-700"/><a href="https://filmbib.dspree.com/">Filmbib</a></li>
+                <li className="hover:text-green-800 py-3"><ExternalLinkIcon className="h-5 mr-3 inline-block justify-self-center text-green-700"/><a href="https://filmoteket.no/">filmoteket.no</a></li>
             </ul>
         </>
     )
 }
 
 export function ListsPage() {
+    if (!localStorage.getItem('list')) {
+        localStorage.setItem('list', 'QOX5zQEACAAJ')
+    }
     const list = localStorage.getItem('list')?.split(',');
+
     const [result, setResult] = useState([]);
     useEffect(()=>{
-        Promise.all(
-            list.map(id => {
-                return (fetch(`https://www.googleapis.com/books/v1/volumes/${id}`))
-            })
-        ).then(function (responses) {
-            // Get a JSON object from each of the responses
-            return Promise.all(responses.map(function (response) {
-                return response.json();
-            }));
-        }).then(function (data) {
-            // Log the data to the console
-            // You would do something with both sets of data here
-            setResult(data)
-        }).catch(function (error) {
-            // if there's an error, log it
-            console.log('ERR: ' + error);
-        });
+        if (list)
+        {
+            Promise.all(
+                list.map(id => {
+                    return (fetch(`https://www.googleapis.com/books/v1/volumes/${id}`))
+                })
+            ).then(function (responses) {
+                // Get a JSON object from each of the responses
+                return Promise.all(responses.map(function (response) {
+                    return response.json();
+                }));
+            }).then(function (data) {
+                // Log the data to the console
+                // You would do something with both sets of data here
+                setResult(data)
+            }).catch(function (error) {
+                // if there's an error, log it
+                console.log('ERR: ' + error);
+            });
+        }
     },[])
     console.log(result)
     return (
@@ -288,7 +295,7 @@ export function ListsPage() {
                             })
                         }
                     </div>
-                    : <p>loading...</p>
+                    : <p>...</p>
             }
 
         </>
