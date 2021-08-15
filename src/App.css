@@ -21,6 +21,10 @@ nav .active:after {
 .TopBar {
   @apply w-full pl-20 pt-5;
 }
+.TopBar input:focus-visible {
+  outline: transparent auto 1px;
+}
+
 .Content {
   @apply ml-20 p-6;
 }

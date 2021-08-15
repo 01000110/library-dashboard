@@ -1,8 +1,8 @@
 import './App.css';
 import {BookOpenIcon, HeartIcon, HomeIcon, LinkIcon, SearchIcon,} from '@heroicons/react/outline'
 import React from "react";
-import {NavLink, Routes, Route} from "react-router-dom";
-import {LoansPage, HomePage, ListsPage, DigitalPage, BookDisplay} from './page.js'
+import {NavLink, Routes, Route, Link} from "react-router-dom";
+import {LoansPage, HomePage, ListsPage, DigitalPage, BookDisplay, SearchResult} from './page.js'
 
 const menuItems = [
     {
@@ -57,14 +57,28 @@ function TopBar() {
     )
 }
 
-function Search() {
-    return (
-        <div className="flex items-center w-5/12 mx-6 px-3 py-2 border rounded hover:bg-white focus-within:bg-white">
-            <label htmlFor="search" className="sr-only">Search</label>
-            <input id="search" placeholder="Search books..." type="text" className="bg-transparent w-11/12"/>
-            <button className="w-1/12 h-full hover:text-green-800 text-gray-500"><SearchIcon /></button>
-        </div>
-    )
+class Search extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { query: '' };
+    }
+    myChangeHandler = (event) => {
+        this.setState({query: event.target.value});
+    }
+    render() {
+        return (
+            <form>
+                <div className="flex items-center w-auto lg:w-5/12 mx-6 px-3 py-2 border rounded hover:bg-white focus-within:bg-white">
+                    <label htmlFor="search" className="sr-only">Search</label>
+                    <input id="search" placeholder="Search library..."
+                           type="text" className="bg-transparent w-11/12 ring-0" onChange={this.myChangeHandler}/>
+                    <Link to={`/search/` + this.state.query} className="w-1/12 h-full hover:text-green-800 text-gray-500">
+                        <button type="submit" className="w-full"><SearchIcon /></button>
+                    </Link>
+                </div>
+            </form>
+        );
+    }
 }
 
 function Personal() {
@@ -94,6 +108,9 @@ function App() {
                   </Route>
                   <Route path="/book/:id">
                       <BookDisplay/>
+                  </Route>
+                  <Route path="/search/:query">
+                      <SearchResult/>
                   </Route>
               </Routes>
           </section>

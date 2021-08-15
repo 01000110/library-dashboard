@@ -1,14 +1,33 @@
 import React, {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import {ChevronDoubleRightIcon, HeartIcon} from "@heroicons/react/outline";
+import {HeartIcon as FullHeartIcon} from "@heroicons/react/solid";
 
 function BookItem(props) {
+    const borrowed = [{id: 'fXFfDwAAQBAJ', due: '2021-09-20'}, {id: 'yHTLngEACAAJ', due: '2021-10-08'}]
+
+    function Button() {
+        return (
+            !borrowed.filter(book => (book.id === props.id)).length
+                ?<button
+                    className="mb-2 md:mb-0 bg-gray-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full cursor-not-allowed"
+                    type="button" disabled={true}>Returned on {props.date}</button>
+                :<>
+                    <p className="text-green-700">due date: {borrowed.filter(book => (book.id === props.id))[0].due}</p>
+                    <button
+                        className="mb-2 md:mb-0 bg-green-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full hover:bg-gray-800"
+                        type="button">Renew
+                    </button>
+                </>
+        )
+    }
+
     return (
-        <div className="flex items-stretch sm:max-w-xl mx-auto lg:mx-0">
+        <div className="flex items-stretch mx-auto lg:mx-0 break-all">
             <Link to={`/book/`+props.id}
                 className="bg-white shadow-lg border-gray-100 border sm:rounded-3xl p-8 non-flex sm:flex sm:space-x-8 w-full">
                 <div className="h-48 md:w-1/4 sm:w-1/3 w-full">
-                    <img className="rounded-3xl shadow-lg h-48 object-contain mx-auto"
+                    <img className="rounded shadow-lg h-48 object-cover mx-auto"
                          src={props.cover}
                          alt={props.title+`'s cover`}/>
                 </div>
@@ -21,17 +40,9 @@ function BookItem(props) {
                         <div className="text-lg text-gray-800">{props.authors.join(', ')}</div>
                     </div>
                     {
-                        props.title === 'Do Dice Play God?' | props.title === 'Compilers'
-                        ?   <>
-                                <p className="text-green-700">due date: 25 Aug 2021</p>
-                                <button className="mb-2 md:mb-0 bg-green-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full hover:bg-gray-800"
-                                        type="button">Renew</button>
-                            </>
-                        :   <button className="mb-2 md:mb-0 bg-gray-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full cursor-not-allowed"
-                                  type="button" disabled={true}>Returned on {props.date}</button>
+                        props.button ? <Button/> : <></>
                     }
                 </div>
-
             </Link>
         </div>
     )
@@ -53,7 +64,6 @@ export function BookDisplay(props) {
             const newList = list.concat(props.id);
             setList(newList);
         }
-        console.log(list)
     }
 
     const { id } = useParams();
@@ -84,8 +94,12 @@ export function BookDisplay(props) {
                             <div className="text-lg text-gray-800">{data.volumeInfo.authors.join(', ')}</div>
                         </div>
                         <div className="flex items-center">
-                            <button className="flex-shrink-0 text-green-800 w-12 h-12  hover:text-gray-800" type="button"
-                            onClick={() => updateList({id: data.id})}><HeartIcon className="h-12"/></button>
+                            <button className="flex-shrink-0 text-green-900 w-12 h-12  hover:text-gray-800" type="button"
+                            onClick={() => updateList({id: data.id})}>
+                                {
+                                    list.includes(data.id) ? <FullHeartIcon className="h-12"/> : <HeartIcon className="h-12"/>
+                                }
+                            </button>
                             {
                             data.volumeInfo.title !== 'Do Dice Play God?' && data.volumeInfo.title !== 'Compilers'
                                 ?   <button className="flex-1 ml-2 mb-2 md:mb-0 bg-green-900 px-5 py-2 shadow-sm tracking-wider text-white rounded-full hover:bg-gray-800"
@@ -170,17 +184,18 @@ export function LoansPage() {
         return (
             <>
                 <header>Your Loans</header>
-                <div className="lg:grid lg:grid-cols-2 space-y-4 lg:gap-4 lg:items-stretch lg:flex">
+                <div className="lg:grid lg:grid-cols-2 space-y-4 lg:space-y-0 lg:gap-4 lg:items-stretch lg:flex">
                 {
                     data.items.map(item => {
                         return (
                             <BookItem key={item.id}
                                 id={item.id}
-                                type={item.volumeInfo.printType}
-                                title={item.volumeInfo.title}
-                                cover={item.volumeInfo.imageLinks.thumbnail}
-                                authors={item.volumeInfo.authors}
-                                date={item.volumeInfo.publishedDate}
+                                type={item.volumeInfo.printType ? item.volumeInfo.printType : ''}
+                                title={item.volumeInfo.title ? item.volumeInfo.title : ''}
+                                cover={item.volumeInfo?.imageLinks ? item.volumeInfo.imageLinks.thumbnail : 'https://books.google.no/googlebooks/images/no_cover_thumb.gif'}
+                                authors={item.volumeInfo.authors ? item.volumeInfo.authors : ['']}
+                                date={item.volumeInfo.publishedDate ? item.volumeInfo.publishedDate : ''}
+                                button={true}
                             />
                         )
                     })
@@ -209,30 +224,126 @@ export function HomePage() {
 
 export function DigitalPage() {
     return (
-        <p>Digital</p>
+        <>
+            <header>Digital Resources</header>
+            <ul>
+                <li><a href="https://www.pressreader.com/catalog/">PressReader</a></li>
+                <li><a href="http://bergen.naxosmusiclibrary.com/">Naxos Music Library</a></li>
+                <li><a href="https://www.nb.no/search">NB.no: Nettbiblioteket</a></li>
+                <li><a href="https://www.bibsent.no/bibliotekprodukter/bookbites">Bookbites (e-book reader)</a></li>
+                <li><a href="https://filmbib.dspree.com/">Filmbib</a></li>
+                <li><a href="https://filmoteket.no/">filmoteket.no</a></li>
+            </ul>
+        </>
     )
 }
 
 export function ListsPage() {
-    const [list, setList] = useState(
-        [localStorage.getItem('list')? localStorage.getItem('list')?.split(',') : null]
-    )
-    useEffect(() => {
-        localStorage.setItem('list', list.join(','));
-        console.log(list);
-    },[list])
-    function updateList(props) {
-        if (list.includes(props.id)) {
-            const newList = list.filter((item) => item !== props.id);
-            setList(newList);
-        }
-        else {
-            const newList = [...list, props.id,];
-            setList(newList);
-        }
-    }
+    const list = localStorage.getItem('list')?.split(',');
+    const [result, setResult] = useState([]);
+    useEffect(()=>{
+        Promise.all(
+            list.map(id => {
+                return (fetch(`https://www.googleapis.com/books/v1/volumes/${id}`))
+            })
+        ).then(function (responses) {
+            // Get a JSON object from each of the responses
+            return Promise.all(responses.map(function (response) {
+                return response.json();
+            }));
+        }).then(function (data) {
+            // Log the data to the console
+            // You would do something with both sets of data here
+            setResult(data)
+        }).catch(function (error) {
+            // if there's an error, log it
+            console.log('ERR: ' + error);
+        });
+    },[])
+    console.log(result)
     return (
-        <button onClick={() => updateList({id: 'xcL3DwAAQBAJ'})}>add</button>
+        <>
+            <header>Your Favorite List</header>
+            {
+                result.length > 0 ?
+                    <div className="lg:grid lg:grid-cols-2 space-y-4 lg:space-y-0 lg:gap-4 lg:items-stretch lg:flex">
+                        {
+                            result.map(item => {
+                                if (item.hasOwnProperty('error')) {
+                                    return null;
+                                }
+                                else {
+                                    return (
+                                        <BookItem key={item.id}
+                                                  id={item.id}
+                                                  type={item.volumeInfo.printType ? item.volumeInfo.printType : ''}
+                                                  title={item.volumeInfo.title ? item.volumeInfo.title : ''}
+                                                  cover={item.volumeInfo?.imageLinks ? item.volumeInfo.imageLinks.thumbnail : 'https://books.google.no/googlebooks/images/no_cover_thumb.gif'}
+                                                  authors={item.volumeInfo.authors ? item.volumeInfo.authors : ['']}
+                                                  date={item.volumeInfo.publishedDate ? item.volumeInfo.publishedDate : ''}
+                                                  button={false}
+                                        />
+                                    )
+                                }
+                            })
+                        }
+                    </div>
+                    : <p>loading...</p>
+            }
+
+        </>
     )
 }
 
+export function SearchResult() {
+    const { query } = useParams();
+    const [page, setPage] = useState(0);
+    const [data, setData] = useState(null);
+    useEffect(() => {
+        fetch(`https://www.googleapis.com/books/v1/volumes?q=`+query+
+            `&printType=books&maxResults=6&projection=lite&orderBy=relevance&key=AIzaSyCSITCdf1iB0kDxrxDsmHFyVXtXqsYvSvE&startIndex=`+page*6)
+            .then(response => response.json())
+            .then(setData)
+    }, [page, query]);
+
+    if(data) {
+        const lastPage = (data.totalItems - 1) / 6;
+        return (
+            <>
+                <header>Search results for: {query}</header>
+                <div className="flex justify-center m-2">
+                    <button onClick={() => setPage(Math.max(page-1, 0))}
+                            className={page > 0
+                                ?`mb-2 md:mb-0 px-5 py-2 shadow-sm tracking-wider text-white rounded-full w-28 bg-green-800`
+                                :`mb-2 md:mb-0 px-5 py-2 shadow-sm tracking-wider text-white rounded-full w-28 bg-gray-900`}>Previous</button>
+                    <button onClick={() => setPage(Math.min(page+1, lastPage))}
+                            className={page < lastPage
+                                ?`mb-2 md:mb-0 px-5 py-2 shadow-sm tracking-wider text-white rounded-full w-28 bg-green-800`
+                                :`mb-2 md:mb-0 px-5 py-2 shadow-sm tracking-wider text-white rounded-full w-28 bg-gray-900`}>Next</button>
+                </div>
+                <div className="lg:grid lg:grid-cols-2 space-y-4 lg:space-y-0 lg:gap-4 lg:items-stretch lg:flex">
+                    {
+                        data.items.map(item => {
+                            return (
+                                <BookItem key={item.id}
+                                          id={item.id}
+                                          type={item.volumeInfo.printType ? item.volumeInfo.printType : ''}
+                                          title={item.volumeInfo.title ? item.volumeInfo.title : ''}
+                                          cover={item.volumeInfo?.imageLinks ? item.volumeInfo.imageLinks.thumbnail : 'https://books.google.no/googlebooks/images/no_cover_thumb.gif'}
+                                          authors={item.volumeInfo.authors ? item.volumeInfo.authors : ['']}
+                                          date={item.volumeInfo.publishedDate ? item.volumeInfo.publishedDate : ''}
+                                          button={false}
+                                />
+                            )
+                        })
+                    }
+                </div>
+            </>
+        )
+    }
+    else {
+        return (
+            <p>Loading...</p>
+        )
+    }
+}
