@@ -301,7 +301,7 @@ export function SearchResult() {
     const [data, setData] = useState(null);
     useEffect(() => {
         fetch(`https://www.googleapis.com/books/v1/volumes?q=`+query+
-            `&printType=books&maxResults=6&projection=lite&orderBy=relevance&key=AIzaSyCSITCdf1iB0kDxrxDsmHFyVXtXqsYvSvE&startIndex=`+page*6)
+            `&printType=books&maxResults=6&projection=lite&orderBy=relevance&startIndex=`+page*6)
             .then(response => response.json())
             .then(setData)
     }, [page, query]);
