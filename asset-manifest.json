@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/library-dashboard/static/css/main.c487b38f.chunk.css",
-    "main.js": "/library-dashboard/static/js/main.1ad8aa55.chunk.js",
-    "main.js.map": "/library-dashboard/static/js/main.1ad8aa55.chunk.js.map",
+    "main.js": "/library-dashboard/static/js/main.9a76b3d4.chunk.js",
+    "main.js.map": "/library-dashboard/static/js/main.9a76b3d4.chunk.js.map",
     "runtime-main.js": "/library-dashboard/static/js/runtime-main.cb9254fe.js",
     "runtime-main.js.map": "/library-dashboard/static/js/runtime-main.cb9254fe.js.map",
-    "static/js/2.99d1229b.chunk.js": "/library-dashboard/static/js/2.99d1229b.chunk.js",
-    "static/js/2.99d1229b.chunk.js.map": "/library-dashboard/static/js/2.99d1229b.chunk.js.map",
+    "static/js/2.4cb63bfc.chunk.js": "/library-dashboard/static/js/2.4cb63bfc.chunk.js",
+    "static/js/2.4cb63bfc.chunk.js.map": "/library-dashboard/static/js/2.4cb63bfc.chunk.js.map",
     "index.html": "/library-dashboard/index.html",
     "static/css/main.c487b38f.chunk.css.map": "/library-dashboard/static/css/main.c487b38f.chunk.css.map",
-    "static/js/2.99d1229b.chunk.js.LICENSE.txt": "/library-dashboard/static/js/2.99d1229b.chunk.js.LICENSE.txt"
+    "static/js/2.4cb63bfc.chunk.js.LICENSE.txt": "/library-dashboard/static/js/2.4cb63bfc.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.cb9254fe.js",
-    "static/js/2.99d1229b.chunk.js",
+    "static/js/2.4cb63bfc.chunk.js",
     "static/css/main.c487b38f.chunk.css",
-    "static/js/main.1ad8aa55.chunk.js"
+    "static/js/main.9a76b3d4.chunk.js"
   ]
 }
