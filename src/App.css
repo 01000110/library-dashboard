@@ -5,7 +5,7 @@
   @apply w-full inset-0 items-center justify-center h-6;
 }
 nav ul {
-  width: 100%;
+  @apply w-full;
 }
 nav .active {
   @apply relative block bg-gray-50 text-green-900 rounded-l-full py-4;
